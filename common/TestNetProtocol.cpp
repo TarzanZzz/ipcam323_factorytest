@@ -251,6 +251,24 @@ int tnp_get_sn(void *ctxt, char *sn, int len)
     return 0;
 }
 
+int tnp_set_sid(void *ctxt, char* sid)
+{
+    char cmd[256];
+    char rsp[256];
+    sprintf(cmd, "sid=%s", sid);
+    if (tnp_send_cmd(ctxt, cmd, rsp, sizeof(rsp)) != 0) return -1;
+    if (strstr(rsp, "sid.") != rsp) return -1;
+    return 0;
+}
+
+int tnp_get_sid(void* ctxt, char* sid, int len)
+{
+    char rsp[256];
+    if (tnp_send_cmd(ctxt, "sid?", rsp, sizeof(rsp)) != 0) return -1;
+    if (strstr(rsp, "sid:") != rsp) return -1;
+    strncpy(sid, rsp + 4, len);
+    return 0;
+}
 int tnp_get_mac(void *ctxt, char *mac, int len)
 {
     char rsp[256];

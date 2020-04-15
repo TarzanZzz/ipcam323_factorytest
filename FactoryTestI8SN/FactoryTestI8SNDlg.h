@@ -69,6 +69,7 @@ private:
     BOOL    m_bConnectState;
     BOOL    m_bSnScaned;
     BOOL    m_bResultBurnSN;
+    BOOL    m_bResultWriteSID;
     BOOL    m_bResultTestSpkMic;
     BOOL    m_bResultTestNet;
     BOOL    m_bResultDone;

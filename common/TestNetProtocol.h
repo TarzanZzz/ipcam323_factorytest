@@ -19,6 +19,8 @@ int   tnp_send_cmd   (void *ctxt, char *cmd, char *rsp, int rlen);
 int   tnp_get_fwver  (void *ctxt, char *ver, int len);
 int   tnp_set_sn     (void *ctxt, char *sn);
 int   tnp_get_sn     (void *ctxt, char *sn , int len);
+int   tnp_set_sid    (void* ctxt, char* sid);
+int   tnp_get_sid    (void* ctxt, char* sid, int len);
 int   tnp_get_mac    (void *ctxt, char *mac, int len);
 int   tnp_get_result (void *ctxt, char *result, int len);
 

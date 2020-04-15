@@ -141,15 +141,19 @@ void CFactoryTestI8SNDlg::DoDeviceTest()
         m_strTestInfo   = "ÕýÔÚÐ´ºÅ ...\r\n";
         m_strTestResult = "ÕýÔÚÐ´ºÅ";
         PostMessage(WM_TNP_UPDATE_UI);
-
-        tnp_set_sn(m_pTnpContext, m_strCurSN.GetBuffer());
+        char* sid = "0000000000";
+        tnp_set_sn(m_pTnpContext, m_strCurSN.GetBuffer ());
+        tnp_set_sid(m_pTnpContext, sid);
         m_strCurSN .ReleaseBuffer();
 
         char sn [65];
+        char sid_buf[32];
 //      char mac[18];
         tnp_get_sn (m_pTnpContext, sn , sizeof(sn ));
+        tnp_get_sid(m_pTnpContext, sid_buf, sizeof(sid_buf));
 //      tnp_get_mac(m_pTnpContext, mac, sizeof(mac));
         m_bResultBurnSN = strcmp(sn, m_strCurSN ) == 0 ? 1 : 0;
+        m_bResultWriteSID = strcmp(sid_buf, sid) == 0 ? 1 : 0;
 //      m_strCurMac     = mac;
         PostMessage(WM_TNP_UPDATE_UI);
     }
@@ -206,14 +210,15 @@ void CFactoryTestI8SNDlg::DoDeviceTest()
     }
 
     if (!m_bTestCancel) {
-        if (m_bResultBurnSN && (bSkipSpkMicTest || m_bResultTestSpkMic) && m_bResultTestNet) {
+        if (m_bResultBurnSN && m_bResultWriteSID && (bSkipSpkMicTest || m_bResultTestSpkMic) && m_bResultTestNet) {
             m_strTestResult = "OK";
         } else {
             m_strTestResult = "NG";
         }
 
-        m_strTestInfo += m_bResultBurnSN  ? "Ð´ºÅ     -  OK\r\n" : "Ð´ºÅ     -  NG\r\n";
-        m_strTestInfo += m_bResultTestNet ? "ÍÌÍÂÁ¿   -  OK\r\n" : "ÍÌÍÂÁ¿   -  NG\r\n";
+        m_strTestInfo += m_bResultBurnSN   ? "Ð´ºÅuid    -  OK\r\n" : "Ð´ºÅuid    -  NG\r\n";
+        m_strTestInfo += m_bResultWriteSID ? "Ð´ºÅsid    -  OK\r\n" : "Ð´ºÅsid    -  NG\r\n";
+        m_strTestInfo += m_bResultTestNet  ? "ÍÌÍÂÁ¿     -  OK\r\n" : "ÍÌÍÂÁ¿     -  NG\r\n";
         if (!bSkipSpkMicTest) {
             m_strTestInfo += m_bResultTestSpkMic? "À®°ÈßäÍ· -  OK\r\n" : "À®°ÈßäÍ· -  NG\r\n";
         }
