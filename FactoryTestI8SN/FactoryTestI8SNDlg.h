@@ -46,6 +46,7 @@ private:
     CString m_strScanSN;
     CString m_strCurSN;
     CString m_strCurMac;
+    CString m_strCurSid;
     CString m_strWiFiThroughPut;
     CString m_strTestResult;
     CString m_strTestInfo;
@@ -67,6 +68,7 @@ private:
     char    m_strLocalHostIP[32];
     BOOL    m_bMesLoginOK;
     BOOL    m_bConnectState;
+    BOOL    m_bEnterButtonDown;
     BOOL    m_bSnScaned;
     BOOL    m_bResultBurnSN;
     BOOL    m_bResultWriteSID;

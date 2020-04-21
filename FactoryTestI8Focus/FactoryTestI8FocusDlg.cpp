@@ -353,7 +353,6 @@ void CFactoryTestI8FocusDlg::OnEnChangeEdtScanSn()
         m_strCurSN  = m_strScanSN.Trim();
         m_strScanSN = "";
         m_bSnScaned = TRUE;
-
 #if ENABLE_MES_SYSTEM
         if (m_bMesLoginOK && stricmp(m_strRouteCheck, "yes") == 0) {
             CString strErrMsg;

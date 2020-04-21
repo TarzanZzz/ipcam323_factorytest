@@ -135,25 +135,29 @@ static DWORD WINAPI DeviceTestThreadProc(LPVOID pParam)
 
 void CFactoryTestI8SNDlg::DoDeviceTest()
 {
+    while (!m_bEnterButtonDown)
+    {
+        Sleep(1000);
+    }
     m_bResultDone = FALSE;
 
     if (!m_bTestCancel) {
         m_strTestInfo   = "正在写号 ...\r\n";
         m_strTestResult = "正在写号";
         PostMessage(WM_TNP_UPDATE_UI);
-        char* sid = "0000000000";
-        tnp_set_sn(m_pTnpContext, m_strCurSN.GetBuffer ());
-        tnp_set_sid(m_pTnpContext, sid);
+        tnp_set_sn(m_pTnpContext , m_strCurSN.GetBuffer ());
+        tnp_set_sid(m_pTnpContext, m_strCurSid.GetBuffer());
         m_strCurSN .ReleaseBuffer();
+        m_strCurSid.ReleaseBuffer();
 
         char sn [65];
-        char sid_buf[32];
+        char sid_buf[65];
 //      char mac[18];
         tnp_get_sn (m_pTnpContext, sn , sizeof(sn ));
         tnp_get_sid(m_pTnpContext, sid_buf, sizeof(sid_buf));
 //      tnp_get_mac(m_pTnpContext, mac, sizeof(mac));
         m_bResultBurnSN = strcmp(sn, m_strCurSN ) == 0 ? 1 : 0;
-        m_bResultWriteSID = strcmp(sid_buf, sid) == 0 ? 1 : 0;
+        m_bResultWriteSID = strcmp(sid_buf, m_strCurSid) == 0 ? 1 : 0;
 //      m_strCurMac     = mac;
         PostMessage(WM_TNP_UPDATE_UI);
     }
@@ -286,6 +290,7 @@ CFactoryTestI8SNDlg::CFactoryTestI8SNDlg(CWnd* pParent /*=NULL*/)
     , m_strConnectState(_T(""))
     , m_strScanSN(_T(""))
     , m_strCurSN(_T(""))
+    , m_strCurSid(_T(""))
     , m_strCurMac(_T(""))
     , m_strWiFiThroughPut(_T(""))
     , m_strTestResult(_T(""))
@@ -307,6 +312,7 @@ void CFactoryTestI8SNDlg::DoDataExchange(CDataExchange* pDX)
     DDX_Text(pDX, IDC_EDT_SCAN_SN, m_strScanSN);
     DDX_Text(pDX, IDC_EDT_CUR_SN, m_strCurSN);
     DDX_Text(pDX, IDC_EDT_CUR_MAC, m_strCurMac);
+    DDX_Text(pDX, IDC_EDT_CUR_SID, m_strCurSid);
     DDX_Text(pDX, IDC_EDT_IPREF_RESULT, m_strWiFiThroughPut);
 }
 
@@ -387,6 +393,7 @@ BOOL CFactoryTestI8SNDlg::OnInitDialog()
     m_bResultTestSpkMic= FALSE;
     m_bResultTestNet   = FALSE;
     m_bResultDone      = FALSE;
+    m_bEnterButtonDown = FALSE;
     UpdateData(FALSE);
 
     m_pTnpContext = tnp_init(GetSafeHwnd(), TRUE);
@@ -477,11 +484,12 @@ void CFactoryTestI8SNDlg::OnEnChangeEdtScanSn()
 
     // TODO:  Add your control notification handler code here
     UpdateData(TRUE);
+    GetDlgItem(IDC_EDT_SCAN_SN)->SetFocus();
     if (m_strScanSN.GetLength() >= 20) {
         m_strCurSN  = m_strScanSN.Trim();
         m_strScanSN = "";
         UpdateData(FALSE);
-
+        GetDlgItem(IDC_EDT_CUR_SID)->SetFocus();
 #if ENABLE_MES_SYSTEM
         if (m_bMesLoginOK && stricmp(m_strRouteCheck, "yes") == 0) {
             CString strErrMsg;
@@ -546,11 +554,13 @@ LRESULT CFactoryTestI8SNDlg::OnTnpDeviceLost(WPARAM wParam, LPARAM lParam)
     m_strScanSN         = "";
     m_strCurSN          = "";
     m_strCurMac         = "";
+    m_strCurSid         = "";
     m_strWiFiThroughPut = "";
     m_strDeviceIP[0]    = '\0';
     m_bConnectState     = FALSE;
     m_bSnScaned         = FALSE;
     m_bResultDone       = FALSE;
+    m_bEnterButtonDown  = FALSE;
     tnp_disconnect(m_pTnpContext);
     UpdateData(FALSE);
     return 0;
@@ -569,7 +579,7 @@ void CFactoryTestI8SNDlg::OnTimer(UINT_PTR nIDEvent)
 {
     switch (nIDEvent) {
     case TIMER_ID_SET_FOCUS:
-        GetDlgItem(IDC_EDT_SCAN_SN)->SetFocus();
+        //GetDlgItem(IDC_EDT_SCAN_SN)->SetFocus();
         break;
     }
     CDialog::OnTimer(nIDEvent);
@@ -578,15 +588,24 @@ void CFactoryTestI8SNDlg::OnTimer(UINT_PTR nIDEvent)
 
 BOOL CFactoryTestI8SNDlg::PreTranslateMessage(MSG *pMsg)
 {
-    if (pMsg->message == WM_KEYDOWN || pMsg->message == WM_KEYUP) {
-        switch (pMsg->wParam) {
-        case ' ': if (pMsg->message == WM_KEYDOWN) OnTnpDeviceLost(0, inet_addr(m_strDeviceIP)); return TRUE;
-        }
+    if (pMsg->message == WM_KEYDOWN && pMsg->message == VK_SPACE)
+    {
+        OnTnpDeviceLost(0, inet_addr(m_strDeviceIP));
+        return TRUE;
     }
+    else if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_RETURN)
+    {
+        UpdateData(true);
+        m_bEnterButtonDown = TRUE;
+        UpdateData(false);
+        GetDlgItem(IDC_BTN_NEXT_DEVICE)->SetFocus();
+    }
+
     return CDialog::PreTranslateMessage(pMsg);
 }
 
 void CFactoryTestI8SNDlg::OnBnClickedBtnNextDevice()
 {
+    GetDlgItem(IDC_EDT_SCAN_SN)->SetFocus();
     OnTnpDeviceLost(0, inet_addr(m_strDeviceIP));
 }
