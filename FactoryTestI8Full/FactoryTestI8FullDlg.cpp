@@ -6,7 +6,7 @@
 #include "FactoryTestI8FullDlg.h"
 #include "TestNetProtocol.h"
 #include "BenQGuruDll.h"
-#include "fanplayer.h"
+#include "ffplayer.h"
 #include "log.h"
 
 #ifdef _DEBUG
@@ -412,10 +412,20 @@ void CFactoryTestI8FullDlg::DoDeviceTest()
         m_pFanPlayer = player_open(url, GetSafeHwnd(), &params);
     }
 
+    for (int i = 0; i < 30 && !m_bTestCancel; i++) Sleep(100);
+    tnp_test_spkmic(m_pTnpContext);
     tick_next = GetTickCount();
-    while (!m_bTestCancel && (m_nKeyTestResult == -1 || m_nLSensorTestResult == -1)) {
+    while (!m_bTestCancel && (m_nSpkTestResult == -1 || m_nMicTestResult == -1 || m_nKeyTestResult == -1 || m_nLSensorTestResult == -1)) {
         tick_next += 1000;
         tnp_get_result(m_pTnpContext, strResult, sizeof(strResult));
+        if (strResult[0] == 'y' && (m_nSpkTestResult != 1 || m_nMicTestResult != 1)) {
+            m_nSpkTestResult = 1; GetDlgItem(IDC_BTN_SPK_RESULT)->SetWindowText("PASS");
+            m_nMicTestResult = 1; GetDlgItem(IDC_BTN_MIC_RESULT)->SetWindowText("PASS");
+        }
+        if (strResult[0] == 'n' && (m_nSpkTestResult == -1 || m_nMicTestResult == -1)) {
+            m_nSpkTestResult = 0; GetDlgItem(IDC_BTN_SPK_RESULT)->SetWindowText("NG");
+            m_nMicTestResult = 0; GetDlgItem(IDC_BTN_MIC_RESULT)->SetWindowText("NG");
+        }
         if (strResult[1] == 'y' && m_nKeyTestResult == -1) {
             m_nKeyTestResult = 1; GetDlgItem(IDC_BTN_KEY_RESULT)->SetWindowText("PASS");
         }
@@ -426,7 +436,7 @@ void CFactoryTestI8FullDlg::DoDeviceTest()
             m_nSDCardTestResult = (strResult[3] == 'y'); GetDlgItem(IDC_BTN_SDCARD_RESULT)->SetWindowText(m_nSDCardTestResult ? "PASS" : "NG");
         }
         PostMessage(WM_TNP_UPDATE_UI);
-        while (!m_bTestCancel && (LONGLONG)tick_next - (LONGLONG)GetTickCount() > 0) Sleep(10);
+        while (!m_bTestCancel && (LONGLONG)tick_next - (LONGLONG)GetTickCount() > 0) Sleep(20);
     }
 
     CloseHandle(m_hTestThread);
