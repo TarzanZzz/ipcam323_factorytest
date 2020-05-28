@@ -152,6 +152,8 @@ void CFactoryTestI8SNDlg::DoDeviceTest()
 
         char sn [65];
         char sid_buf[65];
+        memset(sn, 0, sizeof(sn));
+        memset(sid_buf, 0, sizeof(sid_buf));
 //      char mac[18];
         tnp_get_sn (m_pTnpContext, sn , sizeof(sn ));
         tnp_get_sid(m_pTnpContext, sid_buf, sizeof(sid_buf));

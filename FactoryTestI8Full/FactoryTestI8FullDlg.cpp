@@ -381,6 +381,9 @@ void CFactoryTestI8FullDlg::DoDeviceTest()
     char strSN    [65 ];
 //  char strMAC   [18 ];
     char strResult[256];
+    memset(strVer, 0, sizeof(strVer));
+    memset(strSN, 0, sizeof(strSN));
+    memset(strResult, 0, sizeof(strResult));
 
     tnp_get_sn   (m_pTnpContext, strSN , sizeof(strSN ));
 //  tnp_get_mac  (m_pTnpContext, strMAC, sizeof(strMAC));

@@ -311,6 +311,9 @@ void CFactoryTestI8SMTDlg::DoDeviceTest()
     int   tick_sleep= 0;
     char strVersion[128];
     char strResult [256];
+
+    memset(strVersion, 0, sizeof(strVersion));
+    memset(strResult, 0, sizeof(strResult));
     tnp_get_fwver(m_pTnpContext, strVersion, sizeof(strVersion));
     m_nVersionTestResult = strcmp(strVersion, m_strFwVer) == 0 ? 1 : 0;
 
