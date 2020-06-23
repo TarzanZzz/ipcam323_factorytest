@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
-// Used by FactoryTestI8SMT.rc
+// Microsoft Visual C++ 生成的包含文件。
+// 供 FactoryTestI8SMT.rc 使用
 //
 #define IDD_FACTORYTESTI8SMT_DIALOG     102
 #define IDP_SOCKETS_INIT_FAILED         103

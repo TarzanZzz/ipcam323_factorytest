@@ -13,13 +13,11 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// Chinese (P.R.C.) resources
+// 中文(简体，中国) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
-#ifdef _WIN32
 LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
 #pragma code_page(936)
-#endif //_WIN32
 
 #ifdef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////
@@ -66,6 +64,7 @@ END
 // remains consistent on all systems.
 IDR_MAINFRAME           ICON                    "res\\FactoryTestI8SMT.ico"
 
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // Dialog
@@ -83,11 +82,11 @@ BEGIN
     CONTROL         "NG",IDC_BTN_KEY_RESULT,"Button",BS_OWNERDRAW | WS_TABSTOP,63,194,50,22
     CONTROL         "NG",IDC_BTN_LSENSOR_RESULT,"Button",BS_OWNERDRAW | WS_TABSTOP,63,217,50,22
     CONTROL         "NG",IDC_BTN_VERSION_RESULT,"Button",BS_OWNERDRAW | WS_TABSTOP,63,263,50,22
-    LTEXT           "连接状态：",IDC_STATIC,4,6,37,10
-    LTEXT           "",IDC_TXT_CONNECT_STATE,42,6,85,10
+    LTEXT           "连接状态：",IDC_STATIC,6,9,37,10
+    LTEXT           "",IDC_TXT_CONNECT_STATE,42,6,85,17
     GROUPBOX        "手动测试项目",IDC_STATIC,6,51,114,82
     GROUPBOX        "自动测试项目",IDC_STATIC,6,139,114,172
-    LTEXT           "",IDC_TXT_CUR_VER,42,23,85,20
+    LTEXT           "",IDC_TXT_CUR_VER,41,33,87,16
     CONTROL         "NG",IDC_BTN_SPK_RESULT,"Button",BS_OWNERDRAW | WS_TABSTOP,63,148,50,22
     LTEXT           "光感：",IDC_STATIC,16,223,23,8
     LTEXT           "版本号：",IDC_STATIC,16,270,31,8
@@ -96,7 +95,7 @@ BEGIN
     LTEXT           "喇叭：",IDC_STATIC,16,154,23,8
     LTEXT           "按键：",IDC_STATIC,16,200,23,8
     LTEXT           "红外灯：",IDC_STATIC,16,112,31,8
-    LTEXT           "版本号：",IDC_STATIC,4,23,37,10
+    LTEXT           "版本号：",IDC_STATIC,7,33,30,10
     CONTROL         "NG",IDC_BTN_WIFI_RESULT,"Button",BS_OWNERDRAW | WS_TABSTOP,63,240,50,22
     LTEXT           "WiFi：",IDC_STATIC,16,247,24,8
     PUSHBUTTON      "下一台设备（快捷键空格）",IDC_BTN_NEXT_DEVICE,15,317,102,22
@@ -148,15 +147,41 @@ END
 
 /////////////////////////////////////////////////////////////////////////////
 //
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_FACTORYTESTI8SMT_DIALOG, DIALOG
+    BEGIN
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// AFX_DIALOG_LAYOUT
+//
+
+IDD_FACTORYTESTI8SMT_DIALOG AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
 // String Table
 //
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     IDP_SOCKETS_INIT_FAILED "Windows 套接字初始化失败。"
 END
 
-#endif    // Chinese (P.R.C.) resources
+#endif    // 中文(简体，中国) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

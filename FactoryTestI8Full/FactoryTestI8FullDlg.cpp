@@ -410,7 +410,7 @@ void CFactoryTestI8FullDlg::DoDeviceTest()
         params.auto_reconnect   = 5000;
         params.rtsp_transport   = 2;
         params.audio_buffer_num = 8;
-        sprintf(url, "rtsp://%s/video0", m_strDeviceIP);
+        sprintf(url, "avkcp://%s:8000", m_strDeviceIP);
         if (m_pFanPlayer) player_close(m_pFanPlayer);
         m_pFanPlayer = player_open(url, GetSafeHwnd(), &params);
     }
