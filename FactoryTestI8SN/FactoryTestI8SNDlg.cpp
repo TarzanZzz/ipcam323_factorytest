@@ -171,6 +171,7 @@ void CFactoryTestI8SNDlg::DoDeviceTest()
         PostMessage(WM_TNP_UPDATE_UI);
 
         CString cmd;
+        Sleep(5 * 1000);
         cmd.Format(TEXT("cmd /c iperf3 -c %s > iperf.log"), CString(m_strDeviceIP));
         STARTUPINFO         si = {0};
         PROCESS_INFORMATION pi = {0};
